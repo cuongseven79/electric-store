@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Order" ADD COLUMN     "address" VARCHAR(1024) NOT NULL DEFAULT '',
+ADD COLUMN     "phone" VARCHAR(20) NOT NULL DEFAULT '';

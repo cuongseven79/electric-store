@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+model Staff {
+  id        Int      @id @default(autoincrement())
+  fullname  String?  @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  blogs     Blog[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String?   @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  product   Product[]
+}
+
+model Product {
+  id          Int            @id @default(autoincrement())
+  name        String         @db.VarChar(255)
+  description String         @db.Text
+  cost        Int            @default(0) @db.Integer
+  price       Int            @db.Integer
+  quantity    Int            @db.Integer
+  categoryId  Int            @db.Integer
+  category    Category?      @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  assets      ProductAsset[]
+  orderItem   OrderItem[]
+  blogs       Blog[]
+  feedbacks   FeedBack[]
+}
+
+model ProductAsset {
+  id        Int      @id @default(autoincrement())
+  productId Int      @db.Integer
+  producct  Product  @relation(fields: [productId], references: [id])
+  url       String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  Anonymous
+  User
+}
+
+model OrderItem {
+  orderId    Int       @db.Integer
+  productId  Int       @db.Integer
+  quantity   Int       @db.Integer
+  price      Int       @db.Integer
+  product    Product?  @relation(fields: [productId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  order      Order     @relation(fields: [orderId], references: [id])
+  feedbackId Int?
+  feedback   FeedBack? @relation(fields: [feedbackId], references: [id])
+
+  @@unique([orderId, productId])
+}
+
+enum OrderStatus {
+  Pending
+  Expired
+  Paid
+  Done
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  total         Int         @db.Integer
+  status        OrderStatus @default(Pending)
+  paymentMethod String      @db.VarChar(255)
+  paymentId     String      @db.VarChar(255)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  userId        String
+  phone         String      @default("") @db.VarChar(20)
+  address       String      @default("") @db.VarChar(1024)
+
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  phone         String?         @db.VarChar(20)
+  country       String?         @db.VarChar(20)
+  postcode      String?         @db.VarChar(50)
+  city          String?         @db.VarChar(255)
+  address       String?         @db.VarChar(255)
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Order     Order[]
+  FeedBack  FeedBack[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  productId Int?
+  imageUrl  String?  @db.VarChar(512)
+  title     String   @db.VarChar(512)
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tagName   String   @db.VarChar(255)
+  authorId  Int
+  product   Product? @relation(fields: [productId], references: [id])
+  author    Staff    @relation(fields: [authorId], references: [id])
+}
+
+model FeedBack {
+  id        Int         @id @default(autoincrement())
+  productId Int
+  rate      Int
+  review    String      @db.VarChar(1024)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  product   Product?    @relation(fields: [productId], references: [id])
+  OrderItem OrderItem[]
+}
