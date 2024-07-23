@@ -1,14 +1,5 @@
 'use client';
-import {
-  Avatar,
-  Badge,
-  DatePicker,
-  Image,
-  Space,
-  Table,
-  Tag,
-  message,
-} from 'antd';
+import { Badge, DatePicker, Table, message } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { IOrder } from '@/lib/definitions';
@@ -16,6 +7,7 @@ import { VND } from '@/lib/currency';
 import dayjs from 'dayjs';
 import { TableSearch } from '../tablesearch';
 import { ExportButton } from '../exportbutton';
+import api from '@/lib/api';
 
 const colorStatus = {
   Pending: 'yellow',
@@ -70,8 +62,9 @@ const columns = [
     sorter: (a, b) => dayjs(a.createdAt).diff(dayjs(b.createdAt)),
   },
 ];
-export default function Index({ data }: { data: IOrder[] }) {
-  const [searchData, setSearchData] = useState(data);
+export default function Index() {
+  const [data, setData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
   const [range, setRange] = useState();
 
   const filtered = useMemo(() => {
@@ -82,7 +75,21 @@ export default function Index({ data }: { data: IOrder[] }) {
       (i) =>
         dayjs(i.createdAt).isBefore(end) && dayjs(i.createdAt).isAfter(begin),
     );
-  }, [range]);
+  }, [range, searchData]);
+
+  async function fetch(): Promise<[] | any> {
+    try {
+      const resp = await api('/api/orders');
+      setData(resp.data);
+      setSearchData(resp.data);
+    } catch (error) {
+      message.error(error.message);
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   return (
     <div>

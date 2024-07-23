@@ -28,8 +28,7 @@ export default function EditForm(props: Props) {
         method: 'PATCH',
         body: JSON.stringify(data),
       });
-
-      message.success('Successfully.');
+      message.info('Update category successfully');
     } catch (error) {
       message.error(error.message);
     }
@@ -40,7 +39,7 @@ export default function EditForm(props: Props) {
       await api(`/api/categories/${props.data.id}`, {
         method: 'DELETE',
       });
-      message.success('Successfully.');
+      message.info('Delete category successfully');
       router.back();
     } catch (error) {
       message.error(error.message);
@@ -60,7 +59,11 @@ export default function EditForm(props: Props) {
         label="Category Name"
         name="name"
         rules={[
-          { required: true, message: 'Please input your category name!',min:4 },
+          {
+            required: true,
+            message: 'Please input your category name!',
+            min: 4,
+          },
         ]}
       >
         <Input />

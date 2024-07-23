@@ -1,10 +1,7 @@
 import Form from '@/components/products/create-form';
-import Breadcrumbs from '@/components/breadcrumbs';
-import { Metadata } from 'next';
-
 export default async function Page() {
   return (
-    <main className="flex h-full w-full justify-center">
+    <main className="h-full w-full">
       <Form />
     </main>
   );

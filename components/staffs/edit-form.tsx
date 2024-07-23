@@ -26,7 +26,7 @@ export default function EditForm(props: Props) {
         body: JSON.stringify(data),
       });
 
-      message.success('staff updated successfully.');
+      message.success('Update staff successfully.');
     } catch (error) {
       message.error(error.message);
     }
@@ -37,7 +37,7 @@ export default function EditForm(props: Props) {
       await api(`/api/staffs/${props.staff.id}`, {
         method: 'DELETE',
       });
-      message.success('staff deleted successfully.');
+      message.success('Delete staff successfully.');
       router.refresh();
     } catch (error) {
       message.error(error.message);

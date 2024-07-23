@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export default async function Page({ params }: { params: { id: string } }) {
   const staff = await getStaff(params.id);
   return (
-    <main className="h-full w-full">
+    <div className="mx-auto h-full w-full ">
       <Form staff={staff} />
-    </main>
+    </div>
   );
 }
 

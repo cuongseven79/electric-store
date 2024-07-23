@@ -1,6 +1,7 @@
 'use client';
 import api from '@/lib/api';
 import { ICartItem, IProduct } from '@/lib/definitions';
+import currency from 'currency.js';
 import {
   ReactNode,
   createContext,
@@ -50,8 +51,25 @@ export function CartProvider({
       console.log('hit not found', hits);
       return;
     }
-    console.log('hit found', hit);
-    sendEvent('conversion', hit, 'Add to cart');
+    sendEvent('conversion', hit, 'Add to cart', {
+      // Special subtype
+      eventSubtype: 'addToCart',
+      // An array of objects representing each item added to the cart
+      objectIDs: [hit.objectID],
+      objectData: [
+        {
+          ...hit,
+          // The discount value for this item, if applicable
+          discount: hit.discount || 0,
+          // The price value for this item (minus the discount)
+          price: hit.price,
+          // How many of this item were added
+          quantity: quantity || 1,
+        },
+      ],
+      currency: 'VND',
+      value: hit.price * (quantity || 1),
+    });
   }
 
   function removeCart(productId: number) {
@@ -93,7 +111,7 @@ export function CartProvider({
     const item = cart.find((item) => item.productId == productId);
     if (!item) return;
 
-    if (item.quantity >= item.product!.quantity) return;
+    if (item.quantity <= 1) return;
     const tmp = cart.map((item) => {
       if (item.productId == productId) item.quantity -= 1;
       return item;

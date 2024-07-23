@@ -11,20 +11,16 @@ export function RecommendProvider({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   useEffect(() => {
     if (session && session.user)
-      window.aa('setAuthenticatedUserToken', session?.user.id);
-    window.aa('setUserToken', session?.user.id);
+      window.aa('setAuthenticatedUserToken', `${session?.user.id}`);
+    window.aa('setUserToken', `${session?.user.id}`);
   }, [session]);
   return (
     <InstantSearch
       indexName="ecommerce"
       searchClient={algoClient}
-      insights={{ useCookie: true }}
+      insights={{ useCookie: false }}
     >
-      <Configure
-        userToken={session?.user.id}
-        hitsPerPage={20}
-        clickAnalytics={true}
-      />
+      <Configure hitsPerPage={20} clickAnalytics={true} />
       {children}
     </InstantSearch>
   );

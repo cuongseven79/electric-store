@@ -29,6 +29,7 @@ export default function CreateForm() {
       body: JSON.stringify({ ...data, authorId: session.user.id }),
     })
       .then(async (response) => {
+        message.info('Create blog successfully');
         router.replace('/admin/blogs');
       })
       .catch((error) => {

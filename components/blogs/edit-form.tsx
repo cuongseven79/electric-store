@@ -32,6 +32,7 @@ export default function EditForm({ data }: { data: IBlog }) {
       }),
     })
       .then(async (response) => {
+        message.info('Update blog successfully');
         router.replace('/admin/blogs');
       })
       .catch((error) => {
@@ -44,6 +45,7 @@ export default function EditForm({ data }: { data: IBlog }) {
       method: 'DELETE',
     })
       .then(async (response) => {
+        message.info('Delete blog successfully');
         router.replace('/admin/blogs');
       })
       .catch((error) => {

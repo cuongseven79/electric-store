@@ -25,8 +25,7 @@ export default function EditForm(props: Props) {
         method: 'PATCH',
         body: JSON.stringify(data),
       });
-
-      message.success('staff updated successfully.');
+      message.success('Update staff successfully.');
     } catch (error) {
       console.log(error);
       message.error('Failed to update staff.', error);

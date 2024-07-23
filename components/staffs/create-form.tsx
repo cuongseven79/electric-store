@@ -12,6 +12,7 @@ export default function CreateForm() {
       body: JSON.stringify(data),
     })
       .then(async (response) => {
+        message.info('Create staff successfully');
         router.replace('/admin/staffs');
       })
       .catch((error) => {

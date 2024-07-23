@@ -13,18 +13,7 @@ export const metadata: Metadata = {
   title: 'Catetories',
 };
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) {
-  const query = searchParams?.query || '';
-  const page = Number(searchParams?.page) || 1;
-  const { data, total } = await fetchList({ query, page });
-
+export default async function Page() {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -39,17 +28,7 @@ export default async function Page({
           New category
         </Link>
       </div>
-      <Table data={data} />
+      <Table />
     </div>
   );
-}
-async function fetchList(params?: any): Promise<any> {
-  try {
-    const resp = await api(
-      '/api/categories?' + new URLSearchParams(params).toString(),
-    );
-    return resp;
-  } catch (error) {
-    console.log(error);
-  }
 }

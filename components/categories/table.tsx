@@ -1,9 +1,11 @@
 'use client';
 
+import api from '@/lib/api';
 import { ICategory } from '@/lib/definitions';
-import { Table } from 'antd';
+import { Table, message } from 'antd';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const columns = [
   {
@@ -22,7 +24,20 @@ const columns = [
     sorter: (a, b) => dayjs(a.createdAt).diff(dayjs(b.createdAt)),
   },
 ];
-export default function Index({ data }: { data: ICategory[] }) {
+export default function Index() {
+  const [data, setData] = useState([]);
+
+  async function fetch(): Promise<ICategory[]> {
+    try {
+      const resp = await api('/api/categories');
+      setData(resp.data);
+    } catch (error) {
+      message.error(error);
+    }
+  }
+  useEffect(() => {
+    fetch();
+  }, []);
   return (
     <Table
       columns={columns}

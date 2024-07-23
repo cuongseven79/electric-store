@@ -8,30 +8,13 @@ export const metadata: Metadata = {
   title: 'Customers',
 };
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) {
-  const { data } = await list();
-
+export default async function Page() {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
         <h1 className={`mb-2 text-2xl`}>Order management</h1>
       </div>
-      <Table data={data || []} />
+      <Table />
     </div>
   );
-}
-async function list(): Promise<[] | any> {
-  try {
-    const resp = await api('/api/orders');
-    return resp;
-  } catch (error) {
-    return { data: [] };
-  }
 }

@@ -1,9 +1,5 @@
 import Table from '@/components/blogs/table';
 import { Metadata } from 'next';
-import { Button, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import Search from '@/components/search';
-import api from '@/lib/api';
 import { Icon } from '@/components/icon';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
@@ -12,16 +8,7 @@ export const metadata: Metadata = {
   title: 'Customers',
 };
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) {
-  const { data } = await list();
-
+export default async function Page() {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -37,17 +24,9 @@ export default async function Page({
         </Link>
       </div>
       <Suspense fallback={<div>Loading...</div>}>
-        <Table data={data || []} />
+        <Table />
       </Suspense>
       <div className="mt-5 flex w-full justify-center"></div>
     </div>
   );
-}
-async function list(): Promise<[] | any> {
-  try {
-    const resp = await api('/api/blogs');
-    return resp;
-  } catch (error) {
-    return { data: [] };
-  }
 }

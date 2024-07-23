@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import { VND } from '@/lib/currency';
 import dayjs from 'dayjs';
 import { TableSearch } from '../tablesearch';
+import { IProduct } from '@/lib/definitions';
 
 const columns = [
   {
@@ -58,8 +59,23 @@ const columns = [
     sorter: (a, b) => dayjs(a.createdAt).diff(dayjs(b.createdAt)),
   },
 ];
-export default function Index({ data }: { data: IProduct[] }) {
-  const [filtered, setFiltered] = useState(data);
+export default function Index() {
+  const [data, setData] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+
+  async function fetch(): Promise<IProduct[] | any> {
+    try {
+      const resp = await api('/api/products');
+      setData(resp);
+      setFiltered(resp);
+    } catch (err) {
+      message.error(err?.message || JSON.stringify(err));
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   return (
     <div>

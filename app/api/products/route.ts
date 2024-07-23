@@ -44,6 +44,9 @@ export async function GET(req: NextRequest) {
     const params = req.nextUrl.searchParams;
     const list = await db.product.findMany({
       include: { assets: true, category: true },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     return NextResponse.json(list);
   } catch (e) {

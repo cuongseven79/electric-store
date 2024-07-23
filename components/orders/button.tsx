@@ -1,5 +1,6 @@
 'use client';
 import api from '@/lib/api';
+import { message } from 'antd';
 import { redirect, useRouter } from 'next/navigation';
 
 export function MarkShippedButton({ id }: { id: number }) {
@@ -9,6 +10,7 @@ export function MarkShippedButton({ id }: { id: number }) {
       await api(`/api/orders/${id}`, {
         method: 'PATCH',
       });
+      message.info('Update order successfully');
     } catch (error) {
       console.log(error);
     } finally {

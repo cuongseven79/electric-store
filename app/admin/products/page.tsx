@@ -16,8 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const list = await fetchList();
-
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -30,16 +28,7 @@ export default async function Page() {
         </Link>
         <SyncButton />
       </div>
-      <Table data={list} />
+      <Table />
     </div>
   );
-}
-
-async function fetchList(): Promise<IProduct[] | any> {
-  try {
-    const resp = await api('/api/products');
-    return resp;
-  } catch (error) {
-    console.log(error);
-  }
 }

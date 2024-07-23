@@ -35,6 +35,7 @@ export default function CreateForm() {
       body: JSON.stringify(data),
     })
       .then(async (response) => {
+        message.info('Create product successfully');
         router.replace('/admin/products');
       })
       .catch((error) => {
@@ -43,70 +44,72 @@ export default function CreateForm() {
   };
 
   return (
-    <Form
-      name="basic"
-      wrapperCol={{ span: 24 }}
-      style={{ maxWidth: 600 }}
-      autoComplete="off"
-      onFinish={_handleCreate}
-      layout="vertical"
-    >
-      <Form.Item
-        label="Product Name"
-        name="name"
-        rules={[
-          {
-            required: true,
-            min: 4,
-          },
-        ]}
+    <div className="flex w-full items-center justify-center">
+      <Form
+        name="basic"
+        wrapperCol={{ span: 24 }}
+        style={{ maxWidth: 600 }}
+        autoComplete="off"
+        onFinish={_handleCreate}
+        layout="vertical"
       >
-        <Input />
-      </Form.Item>
-      <Form.Item label="Quantity" name="quantity">
-        <InputNumber min={1} />
-      </Form.Item>
-      <Form.Item
-        label="Category"
-        name="categoryId"
-        rules={[
-          { required: true, message: 'Please input your category name!' },
-        ]}
-      >
-        <Select>
-          {categories?.map((category) => (
-            <Option value={category.id} key={category.id}>
-              {category.name}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item label="Price" name="price" rules={[{ required: true }]}>
-        <InputNumber
-          addonAfter="VND"
-          defaultValue={0}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          }
-        />
-      </Form.Item>
-      <Form.Item
-        label="Description"
-        name="description"
-        rules={[
-          { required: true, message: 'Please input your category name!' },
-        ]}
-      >
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item label="Images" name="images">
-        <Uploader />
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <button className="button" type="submit">
-          Create
-        </button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          label="Product Name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              min: 4,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item label="Quantity" name="quantity" initialValue={1}>
+          <InputNumber min={1} />
+        </Form.Item>
+        <Form.Item
+          label="Category"
+          name="categoryId"
+          rules={[
+            { required: true, message: 'Please input your category name!' },
+          ]}
+        >
+          <Select>
+            {categories?.map((category) => (
+              <Option value={category.id} key={category.id}>
+                {category.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item label="Price" name="price" rules={[{ required: true }]}>
+          <InputNumber
+            addonAfter="VND"
+            defaultValue={0}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+          />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[
+            { required: true, message: 'Please input your category name!' },
+          ]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item label="Images" name="images">
+          <Uploader />
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <button className="button" type="submit">
+            Create
+          </button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 }

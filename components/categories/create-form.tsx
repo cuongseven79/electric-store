@@ -6,12 +6,13 @@ import { redirect, useRouter } from 'next/navigation';
 export default function CreateForm() {
   const router = useRouter();
 
-  const _handleCreate = async (data:any) => {
+  const _handleCreate = async (data: any) => {
     await api('/api/categories', {
       method: 'POST',
       body: JSON.stringify(data),
     })
       .then(async (response) => {
+        message.info('Create category successfully');
         router.replace('/admin/categories');
       })
       .catch((error) => {

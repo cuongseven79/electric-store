@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { IBlog, IOrder } from '@/lib/definitions';
 import { VND } from '@/lib/currency';
 import dayjs from 'dayjs';
+import api from '@/lib/api';
 
 const colorStatus = {
   Pending: 'yellow',
@@ -45,7 +46,20 @@ const columns = [
     render: (v) => dayjs(v).format('HH:mm:ss DD-MM-YYYY'),
   },
 ];
-export default function Index({ data }: { data: IBlog[] }) {
+export default function Index() {
+  const [data, setData] = useState([]);
+
+  async function fetch(): Promise<[] | any> {
+    try {
+      const { data } = await api('/api/blogs');
+      setData(data);
+    } catch (error) {
+      message.error(error);
+    }
+  }
+  useEffect(() => {
+    fetch();
+  }, []);
   return (
     <Table
       columns={columns}

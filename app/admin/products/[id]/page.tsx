@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function Page({ params }: { params: { id: string } }) {
   const data = await fetchData(params.id);
   return (
-    <main>
+    <main className="h-full w-full">
       <Form data={data} />
     </main>
   );
