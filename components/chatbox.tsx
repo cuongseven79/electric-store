@@ -19,7 +19,7 @@ export function ChatBox() {
       return;
     }
 
-    Kommunicate.init('3fa190c26ecb3eca275858f55f817f012', {
+    Kommunicate.init(process.env.NEXT_PUBLIC_APPBOT_ID || '', {
       email: session.user.email,
       automaticChatOpenOnNavigation: true,
       popupWidget: true,
