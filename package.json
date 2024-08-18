@@ -4,6 +4,7 @@
     "build": "prisma generate && next build",
     "dev": "next dev",
     "lint": "next lint",
+     "clean": "rm -rf .next",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "prisma:generate": "prisma generate",

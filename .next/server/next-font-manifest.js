@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/cuongseven/Desktop/electric-store/app/layout\":[\"static/media/4c472ffaefe8ebfa-s.p.woff2\"],\"/Users/cuongseven/Desktop/electric-store/app/home/page\":[\"static/media/dcc209c0b1ab30af-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
